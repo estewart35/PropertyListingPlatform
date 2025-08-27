@@ -1,0 +1,12 @@
+{% extends 'plp_listings/base.html' %}
+
+{% block body %}
+    <form method="POST">
+        {% csrf_token %}
+        <h2>Are you sure you want to delete <span class="border-4 border-bottom border-primary">{{ listing.title }} - {{ listing.location }}</span>?</h2>
+        <div class="d-flex align-items-center gap-2 mt-4">
+            <a href="{% url 'your_listings' %}" class="btn btn-outline-primary"><i class="bi bi-x-lg me-2"></i>Cancel</a>
+            <button type"submit" class="btn btn-danger"><i class="bi bi-trash-fill me-2"></i>Delete</button>
+        </div>
+    </form>
+{% endblock %}

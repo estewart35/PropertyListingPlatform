@@ -1,0 +1,33 @@
+{% extends 'plp_listings/base-home.html' %}
+
+{% block body %}
+<div 
+    class="position-relative" 
+    style="height: calc(100vh - 67px); background-image: url('/static/plp_listings/home-background.png'); background-size: cover; background-position: center;">
+    
+    <!-- Dark Overlay -->
+    <div class="position-absolute top-0 start-0 w-100 h-100" 
+         style="background-color: rgba(0, 0, 0, 0.25); z-index: 1;"></div>
+
+    <!-- Overlay Text and Search -->
+    <div class="position-absolute top-50 start-50 translate-middle text-center text-white" style="z-index: 2;">
+        <h1 class="mb-4" style="font-size: 3rem; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">
+            Find Your Dream Home
+        </h1>
+        <p class="mb-4" style="font-size: 1.2rem; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);">
+            Search for properties in your ideal location
+        </p>
+        
+        <!-- Search Form -->
+        <form action="{% url 'all_listings' %}" method="GET" class="d-flex justify-content-center">
+            <input 
+                type="text" 
+                name="location" 
+                class="form-control form-control-lg me-2" 
+                placeholder="Enter a location..." 
+                style="max-width: 400px;">
+            <button type="submit" class="btn btn-lg btn-primary">Search</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

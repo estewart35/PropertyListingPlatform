@@ -1,0 +1,118 @@
+{% extends 'plp_listings/base.html' %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Your Listings</h1>
+    </div>
+
+    <form action="" method="GET" class="row g-2 align-items-end mb-3">
+        <div class="col-md-3">
+            <label for="location" class="form-label">Location</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input class="form-control" type="search" name="location" id="location" placeholder="Search by location..." value="{{ request.GET.location }}">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <label for="max_price" class="form-label">Max Price</label>
+            <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input class="form-control" type="number" name="max_price" id="max_price" placeholder="None" value="{{ request.GET.max_price }}">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <label for="property_type" class="form-label">Property Type</label>
+            <select class="form-select" name="property_type" id="property_type">
+                <option value="">Any</option>
+                <option value="AP" {% if request.GET.property_type == "AP" %}selected{% endif %}>Apartment</option>
+                <option value="HS" {% if request.GET.property_type == "HS" %}selected{% endif %}>House</option>
+                <option value="ST" {% if request.GET.property_type == "ST" %}selected{% endif %}>Studio</option>
+                <option value="CN" {% if request.GET.property_type == "CN" %}selected{% endif %}>Condo</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <label for="min_bedrooms" class="form-label">Min Beds</label>
+            <input class="form-control" type="number" name="min_bedrooms" id="min_bedrooms" placeholder="None" value="{{ request.GET.min_bedrooms }}">
+        </div>
+        <div class="col-md-1">
+            <label for="min_bathrooms" class="form-label">Min Baths</label>
+            <input class="form-control" type="number" name="min_bathrooms" id="min_bathrooms" placeholder="None" value="{{ request.GET.min_bathrooms }}">
+        </div>
+        <div class="col-md-3">
+            <div class="d-flex gap-2 align-items-end w-100">
+                <button class="btn btn-primary flex-grow-1" type="submit"><i class="bi bi-funnel me-2"></i>Filter</button>
+                <a href="{% url 'new_listing' %}" class="btn btn-primary flex-grow-2"><i class="bi bi-plus-lg me-2"></i>Add Listing</a>
+            </div>
+        </div>
+    </form>
+
+    {% if listings %}
+        <table class="table table-hover">
+            <thead>
+                <tr class="table-primary">
+                    {% comment %} <th scope="col">Image</th> {% endcomment %}
+                    <th scope="col">Title</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Property Type</th>
+                    <th scope="col">Beds</th>
+                    <th scope="col">Baths</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for listing in listings %}
+                    <tr class="table-secondary align-middle">
+                        {% comment %} <td><img src="{{ listing.images }}" class="rounded" style="width: 60px; height: 60px; object-fit: cover; object-position: center;"><img></td> {% endcomment %}
+                        <td class="fw-semibold">{{ listing.title }}</td>
+                        <td class="fw-semibold">{{ listing.location }}</td>
+                        <td>${{ listing.price }}</td>
+                        <td>{{ listing.get_property_type_display }}</td>
+                        <td>{{ listing.bedrooms }}</td>
+                        <td>{{ listing.bathrooms }}</td>
+                        <td>
+                            {% if listing.status == "A" %}
+                                <i class="bi bi-circle-fill text-success"></i>
+                            {% elif listing.status == "P" %}
+                                <i class="bi bi-circle-fill text-warning"></i>
+                            {% elif listing.status == "C" %}
+                                <i class="bi bi-circle-fill text-danger"></i>
+                            {% endif %}
+                            {{ listing.get_status_display }}
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <a href="{% url 'listing_details' listing.id %}" class="btn btn-info btn-sm" title="Details"><i class="bi bi-info-circle"></i></a>
+                                <a href="{% url 'edit_listing' listing.id %}" class="btn btn-primary btn-sm" title="Edit"><i class="bi bi-pencil-square"></i></a>
+                                <a href="{% url 'delete_listing' listing.id %}" class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash-fill"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h4 class="text-center my-5">You have no current listings.</h4>
+    {% endif %}
+
+    <div class="d-flex justify-content-center">
+        <ul class="pagination">
+            {% if listings.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1"><i class="bi bi-chevron-double-left"></i></a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ listings.previous_page_number }}"><i class="bi bi-chevron-left"></i></a></li>
+            {% else %}
+                <li class="page-item disabled"><a class="page-link" href=""><i class="bi bi-chevron-double-left"></i></a></li>
+                <li class="page-item disabled"><a class="page-link" href=""><i class="bi bi-chevron-left"></i></a></li>
+            {% endif %}
+            <li class="page-item page-link text-black">Page {{ listings.number }} of {{ listings.paginator.num_pages }}</li>
+            {% if listings.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ listings.next_page_number }}"><i class="bi bi-chevron-right"></i></a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ listings.paginator.num_pages }}"><i class="bi bi-chevron-double-right"></i></a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link disabled" href=""><i class="bi bi-chevron-right"></i></a></li>
+                <li class="page-item"><a class="page-link disabled" href=""><i class="bi bi-chevron-double-right"></i></a></li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}
