@@ -25,7 +25,8 @@
 ---
 
 ## 📸 Screenshots  
-![Screenshot 1](https://ethanstewart.dev/mockups/propertylistingplatform_mockup_dark.svg) 
+<img src="https://ethanstewart.dev/mockups/propertylistingplatform_mockup_dark.svg" alt="Mockup of Property Listing Platform" style="max-width:100%; height:auto;" />
+
 
 ---
 
