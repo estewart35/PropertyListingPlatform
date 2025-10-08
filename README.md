@@ -37,6 +37,15 @@ git clone https://github.com/estewart35/PropertyListingPlatform.git
 cd PropertyListingPlatform
 ```
 
+Optionally, create and activate a virtual environment to isolate dependencies (recommended):
+```bash
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# macOS / Linux
+source venv/bin/activate
+```
+
 Create a `.env` file in the project root and add the required environment variables:
 ```bash
 # .env
